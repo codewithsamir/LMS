@@ -27,7 +27,9 @@ class DatabaseConnection {
         console.log("MONGODB DISCONNECTED");
         this.handleDisconnection();
 
-    })
+    });
+
+    process.on('SIGTERM', this.handleAppTermination.bind(this))
   }
 
   async  connect() {
@@ -100,3 +102,9 @@ class DatabaseConnection {
     }
   }
 }
+
+// create a singleton instance 
+const dbConnection = new DatabaseConnection;
+
+export default dbConnection.connection.bind(dbConnection);
+export const getDbStatus = dbConnection.getConnectionSatus.bind(dbConnection)
